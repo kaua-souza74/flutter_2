@@ -10,31 +10,30 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Sistema de Seguir',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const SeguirPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class SeguirPage extends StatefulWidget {
+  const SeguirPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<SeguirPage> createState() => _SeguirPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _SeguirPageState extends State<SeguirPage> {
+  bool isFollowing = false;
 
-  void _incrementCounter() {
+  void _toggleFollow() {
     setState(() {
-      _counter++;
+      isFollowing = !isFollowing;
     });
   }
 
@@ -42,27 +41,33 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text('Perfil do Usuário'),
+        centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+        child: ElevatedButton(
+          onPressed: _toggleFollow,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isFollowing ? Colors.green : Colors.blue,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (isFollowing) const Icon(Icons.check, size: 20),
+              if (isFollowing) const SizedBox(width: 8),
+              Text(
+                isFollowing ? 'Seguindo' : 'Seguir',
+                style: const TextStyle(fontSize: 18),
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
